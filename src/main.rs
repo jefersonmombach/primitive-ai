@@ -30,7 +30,7 @@ fn main() {
 }
 
 fn run_pitts_neuron() {
-    println!("Running Artificial neuron of McCulloch-Pitts");
+    println!("Running artificial neuron of McCulloch-Pitts");
 
     fn run_tests(tests: &[([i32; 2], i32)], weights: &[i32; 2], threshold: i32) {
         for &(inputs, expected) in tests {
