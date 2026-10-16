@@ -14,7 +14,7 @@ fn run_pitts_neuron() {
         }
     }
 
-    println!("AND");
+    println!("========== AND ==========");
     let and_weights = [1, 1];
     let and_threshold = 2;
     let and_tests = [
@@ -24,14 +24,25 @@ fn run_pitts_neuron() {
         ([1, 1], 1),
     ];
     run_tests(&and_tests, &and_weights, and_threshold);
+
+    println!("========== OR ===========");
+    let or_weights = [1, 1];
+    let or_threshold = 1;
+    let or_tests = [
+        ([0, 0], 0),
+        ([0, 1], 1),
+        ([1, 0], 1),
+        ([1, 1], 1),
+    ];
+    run_tests(&or_tests, &or_weights, or_threshold);
 }
 
 fn pitts_neuron(inputs: &[i32], weights: &[i32], threshold: i32) -> i32 {
-    let sum: i32 = inputs
-        .iter()
-        .zip(weights.iter())
-        .map(|(input, weight)| input * weight)
-        .sum();
+    let mut sum = 0;
+
+    for i in 0..inputs.len() {
+        sum += inputs[i] * weights[i];
+    }
 
     if sum >= threshold {
         1
