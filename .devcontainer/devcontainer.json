@@ -1,0 +1,26 @@
+{
+  "name": "primitive-ai (Rust)",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-bookworm",
+  "mounts": [
+    "source=primitive-ai-cargo-registry,target=/usr/local/cargo/registry,type=volume",
+    "source=primitive-ai-target,target=${containerWorkspaceFolder}/target,type=volume"
+  ],
+  "postCreateCommand": "sudo chown -R vscode:rustlang /usr/local/cargo/registry ${containerWorkspaceFolder}/target && rustup component add clippy rustfmt rust-src && cargo fetch",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb"
+      ],
+      "settings": {
+        "rust-analyzer.check.command": "clippy",
+        "editor.formatOnSave": true,
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer"
+        }
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}
