@@ -1,8 +1,6 @@
-mod pitts_neuron;
 mod perceptron;
+mod pitts_neuron;
 
-use pitts_neuron::*;
-use perceptron::*;
 use std::io;
 
 fn main() {
@@ -33,4 +31,3 @@ fn main() {
         }
     }
 }
-
