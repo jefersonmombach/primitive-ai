@@ -4,32 +4,36 @@ pub fn run() {
     let tests = [([0, 0], 0), ([0, 1], 0), ([1, 0], 0), ([1, 1], 1)];
 
     let mut weights = [0, 0];
+    let mut bias = 0;
+
     println!("\nInitial weights: {:?}", weights);
+    println!("Initial bias: {}", bias);
 
-    let threshold = 1;
+    train(&tests, &mut weights, &mut bias);
 
-    train(&tests, &mut weights, threshold);
+    println!("\nFinal weights: {:?}", weights);
+    println!("Final bias: {}", bias);
 
-    println!("Final weights: {:?}", weights);
     println!("\nTesting:");
+
     for (inputs, expected) in tests {
-        let output = predict(&inputs, &weights, threshold);
+        let output = predict(&inputs, &weights, bias);
 
         println!("{:?} -> {} (expected: {})", inputs, output, expected);
     }
 }
 
-fn predict(inputs: &[i32], weights: &[i32], threshold: i32) -> i32 {
+fn predict(inputs: &[i32], weights: &[i32], bias: i32) -> i32 {
     let sum: i32 = inputs
         .iter()
         .zip(weights.iter())
         .map(|(input, weight)| input * weight)
         .sum();
 
-    if sum >= threshold { 1 } else { 0 }
+    if sum + bias >= 0 { 1 } else { 0 }
 }
 
-fn train(tests: &[([i32; 2], i32)], weights: &mut [i32; 2], threshold: i32) {
+fn train(tests: &[([i32; 2], i32)], weights: &mut [i32; 2], bias: &mut i32) {
     let learning_rate = 1;
     let max_epochs = 100;
 
@@ -39,7 +43,7 @@ fn train(tests: &[([i32; 2], i32)], weights: &mut [i32; 2], threshold: i32) {
         println!("\nEpoch {}", epoch + 1);
 
         for (inputs, expected) in tests {
-            let predicted = predict(inputs, weights, threshold);
+            let predicted = predict(inputs, weights, *bias);
 
             let error = expected - predicted;
 
@@ -50,14 +54,16 @@ fn train(tests: &[([i32; 2], i32)], weights: &mut [i32; 2], threshold: i32) {
             weights[0] += learning_rate * error * inputs[0];
             weights[1] += learning_rate * error * inputs[1];
 
+            *bias += learning_rate * error;
+
             println!(
-                "input: {:?}, expected: {}, produced: {}, error: {}, weights: {:?}",
-                inputs, expected, predicted, error, weights
+                "input: {:?}, expected: {}, produced: {}, error: {}, weights: {:?}, bias: {}",
+                inputs, expected, predicted, error, weights, bias
             );
         }
 
         if errors == 0 {
-            println!("Training finished!");
+            println!("\nTraining finished!");
             break;
         }
     }
